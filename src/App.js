@@ -4,7 +4,6 @@ import Canvas from './components/Canvas';
 import ColorPalette from './components/ColorPalette';
 import DrawingTools from './components/DrawingTools';
 import AnimationPanel from './components/AnimationPanel';
-import Collaboration from './components/ColorPalette';
 import GradientComponent from './components/GradientComponent';
 
 
@@ -35,7 +34,6 @@ const App = () => {
       
       
       <AnimationPanel frames={frames} setFrames={setFrames} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame} />
-      <Collaboration />
     </div>
   );
 };
