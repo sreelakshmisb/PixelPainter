@@ -6,7 +6,7 @@ import DrawingTools from './components/DrawingTools';
 import AnimationPanel from './components/AnimationPanel';
 import Collaboration from './components/ColorPalette';
 import GradientComponent from './components/GradientComponent';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [selectedTool, setSelectedTool] = useState('pencil');
@@ -32,10 +32,7 @@ const App = () => {
       <DrawingTools onSelectTool={handleToolSelection} />
       <ColorPalette onSelectColor={handleColorSelection} />
       <Canvas frames={frames} currentFrame={currentFrame} selectedTool={selectedTool} selectedColor={selectedColor} />
-      
-      
       <AnimationPanel frames={frames} setFrames={setFrames} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame} />
-      <Collaboration />
     </div>
   );
 };

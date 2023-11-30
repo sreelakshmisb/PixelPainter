@@ -1,5 +1,7 @@
 // AnimationPanel.js
 import React, { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Button';
 
 const AnimationPanel = () => {
   const [frames, setFrames] = useState([]); // State to store animation frames
@@ -41,10 +43,18 @@ const AnimationPanel = () => {
 
   return (
     <div>
-      <button onClick={playAnimation}>Play</button>
-      <button onClick={stopAnimation}>Stop</button>
-      <button onClick={addFrame}>Add Frame</button>
-      <p>Current Frame: {currentFrame + 1}</p>
+        <Box sx= {{
+        my: 2, 
+        display: 'flex', // Use flexbox for inline elements
+        gap: 2, // Add space between the buttons
+        justifyContent: 'center', // Center align the buttons horizontally
+        alignItems: 'center' // Center align the buttons vertically
+        }}>
+          <Button onClick={playAnimation} variant="contained">Play</Button>
+          <Button onClick={stopAnimation} variant="contained">Stop</Button>
+          <Button onClick={addFrame} variant="contained">Add Frame</Button>
+        </Box>
+        <p>Current Frame: {currentFrame + 1}</p>
     </div>
   );
 };

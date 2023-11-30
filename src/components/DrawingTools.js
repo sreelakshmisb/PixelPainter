@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Button';
 
-
-
-
 const DrawingTools = ({ onSelectTool }) => {
   const [selectedTool, setSelectedTool] = useState('pencil'); // Default tool
 
@@ -21,21 +18,25 @@ const DrawingTools = ({ onSelectTool }) => {
   };
 
   return (
-    <Box sx={{ my: 2 }}>
-        (
-            <Button 
-            variant="contained"
-            onClick={() => handleToolSelect('pencil')}
-            >
-            Pencil
-            </Button>
-            <Button 
-            variant="contained"
-            onClick={() => handleToolSelect('eraser')}
-            >
-            Eraser
-            </Button>
-        )
+    <Box sx= {{
+      my: 2, 
+      display: 'flex', // Use flexbox for inline elements
+      gap: 2, // Add space between the buttons
+      justifyContent: 'center', // Center align the buttons horizontally
+      alignItems: 'center' // Center align the buttons vertically
+    }}>
+          <Button 
+          variant="contained"
+          onClick={() => handleToolSelect('pencil')}
+          >
+          Pencil
+          </Button>
+          <Button 
+          variant="contained"
+          onClick={() => handleToolSelect('eraser')}
+          >
+          Eraser
+          </Button>
     </Box>
     // <div>
     //   {/* Render drawing tools here */}
