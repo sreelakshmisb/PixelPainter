@@ -4,7 +4,6 @@ import Canvas from './components/Canvas';
 import ColorPalette from './components/ColorPalette';
 import DrawingTools from './components/DrawingTools';
 import AnimationPanel from './components/AnimationPanel';
-import Collaboration from './components/ColorPalette';
 import GradientComponent from './components/GradientComponent';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
