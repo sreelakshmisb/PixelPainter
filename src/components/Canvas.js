@@ -1,19 +1,40 @@
 // Canvas.js
-import React, { useState } from 'react';
-import {useRef, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
 
 const Canvas = ({ selectedColor, selectedTool }) => {
   const canvasSize = 30; // Change the size of the canvas as needed
-  const [pixels, setPixels] = useState(createEmptyCanvas(canvasSize));
+
+  // State 1: Canvas with borders and gaps
+  const [originalPixels, setOriginalPixels] = useState(createEmptyCanvas(canvasSize));
+
+  // State 2: Canvas without borders and gaps
+  const [currentPixels, setCurrentPixels] = useState(createEmptyCanvas(canvasSize));
+
   const [isDrawing, setIsDrawing] = useState(false);
-  
   const tableRef = useRef(null);
-  
-  //function to save canvas
+
+  // Function to save canvas
   const saveCanvas = () => {
-    html2canvas(tableRef.current).then(canvas => {
-      const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    // Set currentPixels to the current state of the canvas
+    setCurrentPixels((prevPixels) => [...prevPixels]);
+
+    // Add styles for saving
+    tableRef.current.style.borderCollapse = 'collapse';
+    tableRef.current.querySelectorAll('td').forEach((td) => {
+      td.style.border = 'none';
+      td.style.padding = '0';
+    });
+
+    html2canvas(tableRef.current, { scale: 2 }).then((canvas) => {
+      // Revert styles after saving
+      tableRef.current.style.borderCollapse = '';
+      tableRef.current.querySelectorAll('td').forEach((td, index) => {
+        td.style.border = '1px solid #ccc';
+        td.style.padding = '';
+      });
+
+      const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
       const link = document.createElement('a');
       link.download = 'my-grid-canvas.png';
       link.href = image;
@@ -21,17 +42,23 @@ const Canvas = ({ selectedColor, selectedTool }) => {
     });
   };
 
+  useEffect(() => {
+    // Reset the canvas with borders and gaps after the image is saved
+    setOriginalPixels((prevPixels) => [...prevPixels]);
+  }, [currentPixels]);
+
   const clearCanvas = () => {
-    const clearedPixels = createEmptyCanvas(canvasSize); // Assuming canvasSize is defined
-    setPixels(clearedPixels);
+    // Clear both states
+    setOriginalPixels(createEmptyCanvas(canvasSize));
+    setCurrentPixels(createEmptyCanvas(canvasSize));
   };
 
   // Function to create an empty canvas
   function createEmptyCanvas(size) {
     const emptyCanvas = [];
-    for (let i = 0; i < size/2; i++) {
+    for (let i = 0; i < size / 2; i++) {
       const row = [];
-      for (let j = 0; j < size*2; j++) {
+      for (let j = 0; j < size * 2; j++) {
         row.push({ color: 'white' }); // Initialize with a default color
       }
       emptyCanvas.push(row);
@@ -42,15 +69,22 @@ const Canvas = ({ selectedColor, selectedTool }) => {
   // Function to handle pixel click and change its color
   const handlePixelClick = (rowIndex, colIndex) => {
     if (selectedTool === 'pencil') {
-      const updatedPixels = [...pixels];
-      updatedPixels[rowIndex][colIndex].color = selectedColor;
-      setPixels(updatedPixels);
+      const updatedOriginalPixels = [...originalPixels];
+      updatedOriginalPixels[rowIndex][colIndex].color = selectedColor;
+      setOriginalPixels(updatedOriginalPixels);
+
+      const updatedCurrentPixels = [...currentPixels];
+      updatedCurrentPixels[rowIndex][colIndex].color = selectedColor;
+      setCurrentPixels(updatedCurrentPixels);
+    } else if (selectedTool === 'eraser') {
+      const updatedOriginalPixels = [...originalPixels];
+      updatedOriginalPixels[rowIndex][colIndex].color = 'white';
+      setOriginalPixels(updatedOriginalPixels);
+
+      const updatedCurrentPixels = [...currentPixels];
+      updatedCurrentPixels[rowIndex][colIndex].color = 'white';
+      setCurrentPixels(updatedCurrentPixels);
     }
-    else if (selectedTool === 'eraser') {
-        const updatedPixels = [...pixels];
-        updatedPixels[rowIndex][colIndex].color = 'white'; // Set to the default color or any desired color for eraser
-        setPixels(updatedPixels);
-      }
     // Add other drawing tools logic here if needed
   };
 
@@ -61,8 +95,6 @@ const Canvas = ({ selectedColor, selectedTool }) => {
   const handleMouseUp = () => {
     setIsDrawing(false);
   };
-
-  // Add functions to draw, erase, fill, etc.
 
   return (
     <div>
@@ -75,7 +107,7 @@ const Canvas = ({ selectedColor, selectedTool }) => {
         style={{ userSelect: 'none' }} // Disable text selection on drag
       >
         <tbody>
-          {pixels.map((row, rowIndex) => (
+          {currentPixels.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((pixel, colIndex) => (
                 <td
@@ -84,7 +116,7 @@ const Canvas = ({ selectedColor, selectedTool }) => {
                     width: '20px',
                     height: '20px',
                     backgroundColor: pixel.color,
-                    border: '1px solid #ccc',
+                    border: '1px solid #ccc', // Set default border for current state
                   }}
                   onMouseOver={() => {
                     if (isDrawing) {
