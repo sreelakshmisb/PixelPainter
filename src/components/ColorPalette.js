@@ -8,6 +8,7 @@ const ColorPalette = ({ onSelectColor }) => {
   const imageInputRef = useRef(null);
   const [useGradient, setUseGradient] = useState(true);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const [selectedCursorColor, setSelectedCursorColor] = useState('#000000'); // Initial cursor color
 
   // Define the base color values
   const baseColors = [
@@ -23,12 +24,16 @@ const ColorPalette = ({ onSelectColor }) => {
   const handleColorSelect = (color) => {
     // Call the provided onSelectColor function from the parent component
     onSelectColor(color);
+    // Set the selected color for the cursor
+    setSelectedCursorColor(color);
   };
 
   // Function to generate a gradient of shades for a base color
   const generateShades = (baseColor) => {
     const color = tinycolor(baseColor);
-    const shades = Array.from({ length: numSteps }, (_, index) => color.clone().lighten(index / numSteps * 100).toHexString());
+    const shades = Array.from({ length: numSteps }, (_, index) =>
+      color.clone().lighten((index / numSteps) * 100).toHexString()
+    );
     return shades.slice(0, numSteps / 2); // Slice to get the first half
   };
 
@@ -76,13 +81,31 @@ const ColorPalette = ({ onSelectColor }) => {
     }
   };
 
+  // Function to handle cursor movement
+  const handleMouseMove = (e) => {
+    if (!useGradient) return;
+
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+
+    const x = e.clientX - cursor.clientWidth / 2;
+    const y = e.clientY - cursor.clientHeight / 2;
+
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
+  };
+
   // Toggle between gradient and color picker
   const toggleMode = () => {
     setUseGradient(!useGradient);
   };
 
   return (
-    <div style={{ width: '100vw' }}>
+    <div
+      style={{ width: '100vw' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setUseGradient(true)}
+    >
       {/* Toggle Button */}
       <button onClick={toggleMode}>{useGradient ? 'Use Image Gradient' : 'Use Color Picker'}</button>
 
@@ -97,7 +120,6 @@ const ColorPalette = ({ onSelectColor }) => {
               width: `${100 / (numSteps / 2)}%`, // Equal width for each color step
               height: '30px',
               margin: '0',
-              cursor: 'pointer',
               display: 'inline-block',
               border: 'none', // Remove the border between colors
             }}
@@ -109,8 +131,25 @@ const ColorPalette = ({ onSelectColor }) => {
         <div>
           <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageUpload} />
           {/* Display the uploaded image */}
-          {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: '100%', marginTop: '10px' }} />}
+          {uploadedImageUrl && (
+            <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: '100%', marginTop: '10px' }} />
+          )}
         </div>
+      )}
+
+      {/* Custom cursor for gradient mode */}
+      {useGradient && (
+        <div
+          id="custom-cursor"
+          style={{
+            position: 'fixed',
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            background: selectedCursorColor,
+            pointerEvents: 'none',
+          }}
+        ></div>
       )}
     </div>
   );
