@@ -54,7 +54,7 @@ const AnimationPanel = () => {
           <Button onClick={stopAnimation} variant="contained">Stop</Button>
           <Button onClick={addFrame} variant="contained">Add Frame</Button>
         </Box>
-        <p>Current Frame: {currentFrame + 1}</p>
+         {/* <p>Current Frame: {currentFrame + 1}</p> */}
     </div>
   );
 };

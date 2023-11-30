@@ -83,9 +83,9 @@ const ColorPalette = ({ onSelectColor }) => {
   
 
   return (
-    <div style={{ width: '50vw', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ width: '50vw', display: 'flex', flexDirection: 'column', alignItems: 'center',  marginLeft: '10px' }}>
       {/* Toggle Button */}
-      <Button onClick={toggleMode} variant="contained" style={{ marginBottom: '10px' }}>
+      <Button onClick={toggleMode} variant="contained" style={{ marginBottom: '20px',  alignSelf : 'flex-start'}}>
         {useGradient ? 'Use Image Gradient' : 'Use Color Picker'}
       </Button>
 
