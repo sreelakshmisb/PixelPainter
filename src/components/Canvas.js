@@ -106,8 +106,7 @@ const Canvas = ({ selectedColor, selectedTool }) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ userSelect: 'none' }} // Disable text selection on drag
-        style={{ marginTop: '50px' }}
+        style={{ userSelect: 'none', marginTop: '20px' }} // Disable text selection on drag
       >
         <tbody>
           {currentPixels.map((row, rowIndex) => (
