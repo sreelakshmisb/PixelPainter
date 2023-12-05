@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import Button from 'react-bootstrap/Button';
+
 
 const Canvas = ({ selectedColor, selectedTool }) => {
   const canvasSize = 30; // Change the size of the canvas as needed
@@ -15,7 +17,33 @@ const Canvas = ({ selectedColor, selectedTool }) => {
 
   // State for square size
   const [squareSize, setSquareSize] = useState(20);
+  // Function to save canvas
+  const saveCanvas = () => {
+    // Set currentPixels to the current state of the canvas
+    setCurrentPixels((prevPixels) => [...prevPixels]);
 
+    // Add styles for saving
+    tableRef.current.style.borderCollapse = 'collapse';
+    tableRef.current.querySelectorAll('td').forEach((td) => {
+      td.style.border = 'none';
+      td.style.padding = '0';
+    });
+
+    html2canvas(tableRef.current, { scale: 2 }).then((canvas) => {
+      // Revert styles after saving
+      tableRef.current.style.borderCollapse = '';
+      tableRef.current.querySelectorAll('td').forEach((td, index) => {
+        td.style.border = '1px solid #ccc';
+        td.style.padding = '';
+      });
+
+      const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+      const link = document.createElement('a');
+      link.download = 'my-grid-canvas.png';
+      link.href = image;
+      link.click();
+    });
+  };
   useEffect(() => {
     // Reset the canvas with borders and gaps after the image is saved
     setOriginalPixels((prevPixels) => [...prevPixels]);
@@ -112,9 +140,11 @@ const Canvas = ({ selectedColor, selectedTool }) => {
           onChange={(e) => setSquareSize(Math.max(1, parseInt(e.target.value, 10)))}
         />
       </label>
-      <button onClick={clearCanvas}>Reset</button>
+      <button onClick={saveCanvas}>Save</button>
+      <Button variant="primary" onClick={clearCanvas}>Reset</Button>
     </div>
   );
 };
 
 export default Canvas;
+
