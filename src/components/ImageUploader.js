@@ -1,0 +1,81 @@
+import React, { useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+
+const ImageUploader = ({ onColorPicked }) => {
+  const [imageSrc, setImageSrc] = useState(null);
+  const [pickedColor, setPickedColor] = useState(null);
+
+  const onDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setImageSrc(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const pickColor = (e) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const img = new Image();
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      context.drawImage(img, 0, 0, img.width, img.height);
+
+      const x = e.nativeEvent.offsetX;
+      const y = e.nativeEvent.offsetY;
+      const pixel = context.getImageData(x, y, 1, 1).data;
+
+      const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+      setPickedColor(color);
+      onColorPicked(color); // Pass the picked color to the parent component
+    };
+
+    img.src = imageSrc;
+  };
+
+  return (
+    <div>
+      <div {...getRootProps()} style={dropzoneStyle}>
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the image here...</p>
+        ) : (
+          <p>Drag & drop an image here, or click to select one</p>
+        )}
+      </div>
+      {imageSrc && (
+        <div>
+          <div style={{ maxWidth: '400px', maxHeight: '300px', overflow: 'hidden' }}>
+            <img src={imageSrc} alt="Uploaded" style={imageStyle} onClick={pickColor} />
+          </div>
+          {pickedColor && (
+            <p>Picked Color: <span style={{ color: pickedColor }}>{pickedColor}</span></p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const dropzoneStyle = {
+  border: '2px dashed #cccccc',
+  borderRadius: '4px',
+  padding: '20px',
+  textAlign: 'center',
+  cursor: 'pointer',
+};
+
+const imageStyle = {
+  maxWidth: '100%',
+  maxHeight: '100%',
+  cursor: 'crosshair',
+};
+
+export default ImageUploader;
