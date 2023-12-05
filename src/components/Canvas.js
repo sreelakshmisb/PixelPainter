@@ -1,8 +1,6 @@
 // Canvas.js
 import React, { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Button';
 
 const Canvas = ({ selectedColor, selectedTool }) => {
   const canvasSize = 30; // Change the size of the canvas as needed
@@ -15,6 +13,9 @@ const Canvas = ({ selectedColor, selectedTool }) => {
 
   const [isDrawing, setIsDrawing] = useState(false);
   const tableRef = useRef(null);
+
+  // State for square size
+  const [squareSize, setSquareSize] = useState(20);
 
   // Function to save canvas
   const saveCanvas = () => {
@@ -106,7 +107,7 @@ const Canvas = ({ selectedColor, selectedTool }) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ userSelect: 'none', marginTop: '20px' }} // Disable text selection on drag
+        style={{ userSelect: 'none', width: '100%' }} // Occupy the width of the screen
       >
         <tbody>
           {currentPixels.map((row, rowIndex) => (
@@ -115,8 +116,8 @@ const Canvas = ({ selectedColor, selectedTool }) => {
                 <td
                   key={colIndex}
                   style={{
-                    width: '20px',
-                    height: '20px',
+                    width: `${squareSize}px`,
+                    height: `${squareSize}px`,
                     backgroundColor: pixel.color,
                     border: '1px solid #ccc', // Set default border for current state
                   }}
@@ -132,16 +133,16 @@ const Canvas = ({ selectedColor, selectedTool }) => {
           ))}
         </tbody>
       </table>
-    <Box sx= {{
-      my: 2, 
-      display: 'flex', // Use flexbox for inline elements
-      gap: 2, // Add space between the buttons
-      justifyContent: 'center', // Center align the buttons horizontally
-      alignItems: 'center' // Center align the buttons vertically
-    }}>
-        <Button onClick={saveCanvas} variant="contained">Save</Button>
-        <Button onClick={clearCanvas} variant="contained">Reset</Button>
-      </Box>
+      <label>
+        Square Size:
+        <input
+          type="number"
+          value={squareSize}
+          onChange={(e) => setSquareSize(Math.max(1, parseInt(e.target.value, 10)))}
+        />
+      </label>
+      <button onClick={saveCanvas}>Save</button>
+      <button onClick={clearCanvas}>Reset</button>
     </div>
   );
 };
