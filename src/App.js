@@ -1,11 +1,11 @@
 // App.js
 import React, { useState } from 'react';
 import Canvas from './components/Canvas';
-import ColorPalette from './components/ColorPalette';
+import ImageUploader from './components/ImageUploader';
 import DrawingTools from './components/DrawingTools';
+import ColorPalette from './components/ColorPalette';
 import AnimationPanel from './components/AnimationPanel';
 import GradientComponent from './components/GradientComponent';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [selectedTool, setSelectedTool] = useState('pencil');
@@ -25,12 +25,12 @@ const App = () => {
   };
 
   return (
-  
     <div>
       <GradientComponent />
+      <ImageUploader onColorPicked={handleColorSelection} />
       <DrawingTools onSelectTool={handleToolSelection} />
       <ColorPalette onSelectColor={handleColorSelection} />
-      <Canvas frames={frames} currentFrame={currentFrame} selectedTool={selectedTool} selectedColor={selectedColor} />
+      <Canvas selectedColor={selectedColor} selectedTool={selectedTool} frames={frames} currentFrame={currentFrame} />
       <AnimationPanel frames={frames} setFrames={setFrames} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame} />
     </div>
   );
