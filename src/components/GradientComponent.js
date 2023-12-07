@@ -1,5 +1,5 @@
 import React from 'react';
-import '../GradientComponent.css'; // Import your CSS file
+import '../GradientComponent.css'; // Importing CSS file
 
 const GradientComponent = () => {
   return (

@@ -1,7 +1,6 @@
-// DrawingTools.js
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 const DrawingTools = ({ onSelectTool }) => {
   const [selectedTool, setSelectedTool] = useState('pencil'); // Default tool
@@ -17,37 +16,29 @@ const DrawingTools = ({ onSelectTool }) => {
     }
   };
 
-  return (
-    <Box sx= {{
-      my: 2, 
-      display: 'flex', // Use flexbox for inline elements
-      gap: 2, // Add space between the buttons
-      justifyContent: 'center', // Center align the buttons horizontally
-      alignItems: 'center' // Center align the buttons vertically
-    }}>
-          <Button 
-          variant="contained"
-          onClick={() => handleToolSelect('pencil')}
-          >
-          Pencil
-          </Button>
-          <Button 
-          variant="contained"
-          onClick={() => handleToolSelect('eraser')}
-          >
-          Eraser
-          </Button>
-    </Box>
-    // <div>
-    //   {/* Render drawing tools here */}
-      
+  // Tool buttons data
+  const toolButtons = [
+    { tool: 'pencil', label: 'Pencil' },
+    { tool: 'eraser', label: 'Eraser' },
+  ];
 
-    //   <button onClick={() => handleToolSelect('line')}>Line</button>
-    //   <button onClick={() => handleToolSelect('circle')}>Circle</button>
-    //   <button onClick={() => handleToolSelect('rectangle')}>Rectangle</button>
-    //   {/* Add more tools as needed */}
-    // </div>
+  return (
+    <Box sx={{ my: 2 }}>
+      {toolButtons.map(({ tool, label }) => (
+        <Button
+          key={tool}
+          variant="contained"
+          onClick={() => handleToolSelect(tool)}
+          disabled={selectedTool === tool} // Disabling the button if it's already selected
+        >
+          {selectedTool === tool ? `Selected: ${label}` : label}
+        </Button>
+      ))}
+    </Box>
   );
 };
 
 export default DrawingTools;
+
+
+
