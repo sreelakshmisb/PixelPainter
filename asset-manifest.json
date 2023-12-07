@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/PixelPainter/static/css/main.182726dc.css",
-    "main.js": "/PixelPainter/static/js/main.dc2665f9.js",
+    "main.js": "/PixelPainter/static/js/main.6b49d6d2.js",
     "index.html": "/PixelPainter/index.html",
     "main.182726dc.css.map": "/PixelPainter/static/css/main.182726dc.css.map",
-    "main.dc2665f9.js.map": "/PixelPainter/static/js/main.dc2665f9.js.map"
+    "main.6b49d6d2.js.map": "/PixelPainter/static/js/main.6b49d6d2.js.map"
   },
   "entrypoints": [
     "static/css/main.182726dc.css",
-    "static/js/main.dc2665f9.js"
+    "static/js/main.6b49d6d2.js"
   ]
 }
