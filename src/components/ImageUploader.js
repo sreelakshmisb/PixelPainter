@@ -9,7 +9,7 @@ const ImageUploader = ({ onColorPicked }) => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
 
-    reader.onload = () => {Tem
+    reader.onload = () => {
       setImageSrc(reader.result);
     };
 
